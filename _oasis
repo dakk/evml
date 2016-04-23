@@ -9,5 +9,5 @@ Plugins:     META (0.4), DevFiles (0.4)
 Library evml
   Path:       src
   BuildTools: ocamlbuild
-  Modules:    parser, instr, vm
+  Modules:    Parser, Instr, Vm
   
