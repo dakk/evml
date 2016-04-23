@@ -1,4 +1,4 @@
-module EVML =
+module EVM =
 	(* Create the initial state of a given programm *)
 	let init -> Contract -> State;;
 	
