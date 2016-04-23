@@ -1,0 +1,13 @@
+OASISFormat: 0.4
+Name:        evml
+Version:     0.1
+Synopsis:    type-safe ethereum virtual machine
+Authors:     Davide Gessa <gessadavide@gmail.com>
+License:     MIT
+Plugins:     META (0.4), DevFiles (0.4)
+
+Library evml
+  Path:       src
+  BuildTools: ocamlbuild
+  Modules:    parser, instr
+  
