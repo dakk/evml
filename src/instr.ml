@@ -1,6 +1,6 @@
-module Instr = 
+module Instr = struct
 
-type Op = 
+type op = 
 	  STOP
 	| ADD
 	| SUB
@@ -136,12 +136,13 @@ type Op =
 
 
 
-type GasTier = ZERO | BASE | VERY_LOW | LOW | MID | HIGH | EXT | SPECIAL | INVALID;;
+type gastier = ZERO | BASE | VERYLOW | LOW | MID | HIGH | EXT | SPECIAL | INVALID;;
 
-let gas_price t = 
+let gas_price t =
+	match t with 
 	| ZERO -> 0
 	| BASE -> 1
-	| VERY_LOW -> 2
+	| VERYLOW -> 2
 	| LOW -> 3
 	| MID -> 4
 	| HIGH -> 5
@@ -167,7 +168,7 @@ let gas_of_op i =
 	| SWAP7 | SWAP8 | SWAP9 | SWAP10 | SWAP11 | SWAP12 | SWAP13 | SWAP14 | SWAP15 | SWAP16 
 	| MSTORE | MSTORE8 | NOT | LT | GT | SLT | SGT | EQ | ISZERO | AND | OR | XOR | BYTE
 	| ADD | SUB | CALLDATALOAD | CALLDATACOPY | CODECOPY
-		-> gas VERYLOW 
+		-> gas_price VERYLOW 
 
 	| MUL | DIV | SDIV | MOD | SMOD | SIGNEXTEND
 		-> gas_price LOW	
@@ -190,7 +191,7 @@ let gas_of_op i =
 ;;
 
 
-let hex_of_op i =
+let op_to_hex i =
 	match i with
 	| STOP -> 0x00
 	| ADD -> 0x01
@@ -325,7 +326,7 @@ let hex_of_op i =
 ;;
 
 
-let op_of_hex h = 
+let hex_to_op h = 
 	match h with
 	| 0x00 -> STOP
 	| 0x01 -> ADD
@@ -633,8 +634,8 @@ let dsize_of_op o =
 	| _ -> 0
 ;;
 
-type t = struct {
-	op		:	Op		;
+type t = {
+	op		:	op		;
 	data	:	int list	
 };;
 
@@ -646,14 +647,17 @@ let rec data_to_string d n =
 	| [] when n > 0 -> failwith "Not enough data"
 ;;
 
-let instr_to_hex i = 
+let to_hex i = 
 	(Printf.sprintf "%X" (op_to_hex i.op)) ^ (data_to_string i.data (dsize_of_op i.op))
 ;;
 
-let instr_to_asm i = 
+let to_asm i = 
 	(op_to_asm i.op) ^ " " ^ (data_to_string i.data (dsize_of_op i.op))
 ;;
 
+
+let create (op, data) = {op=op; data=data};;
+
 end
 
-type Contract = Instr.t list;;
+type contract = Instr.t list;;
