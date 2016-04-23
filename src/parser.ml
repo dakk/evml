@@ -8,16 +8,32 @@ let contract_of_bytes bs =
 		| n -> 
 			let chunk = String.sub s 0 2 in
 			let s' = String.sub s 2 n-2 in
-			let i = hex_to_instr (Scanf.sscanf chunk "%x" (fun x -> x)) in
-				parse_chunks s' (i::c)
+			let op = hex_to_op (Scanf.sscanf chunk "%x" (fun x -> x)) in
+				let get_data s' n =
+					match n with
+					| 0 -> s'
+					| n -> 
+						let dchunk = Scanf.sscanf (String.sub s 0 2) "%x" (fun x -> x) in
+						let s' = String.sub s 2 n-2 in
+						dchunk::(get_data s' (n-1))						
+				in
+				let isize = dsize_of_op op in
+				parse_chunks s' ({op=op,data=(get_data s')}::c)
 	in
-		prase_chunks bs []
+		parse_chunks bs []
 ;;
 
 
 let rec contract_to_asm il =
 	match il with
-	| i::il' -> (instr_to_string i) ^ "\n" ^ (contract_to_asm il')
+	| i::il' -> (instr_to_asm i) ^ "\n" ^ (contract_to_asm il')
 	| [] -> "\n"
 ;;
 
+
+let rec contract_to_bytes il =
+	match il with
+	| i::il' -> 
+		(instr_to_hex i) ^ (contract_to_bytes il')
+	| [] -> ""
+;;

@@ -1,4 +1,4 @@
-type Instr = 
+type Op = 
 	  STOP
 	| ADD
 	| SUB
@@ -148,7 +148,7 @@ let gas_price t =
 	| INVALID -> 8
 ;;
 
-let gas_of_instr i =
+let gas_of_op i =
 	match i with
 	| STOP | RETURN | SUICIDE ->
 		gas_price ZERO
@@ -188,7 +188,7 @@ let gas_of_instr i =
 ;;
 
 
-let hex_of_instr i =
+let hex_of_op i =
 	match i with
 	| STOP -> 0x00
 	| ADD -> 0x01
@@ -323,7 +323,7 @@ let hex_of_instr i =
 ;;
 
 
-let instr_of_hex h = 
+let op_of_hex h = 
 	match h with
 	| 0x00 -> STOP
 	| 0x01 -> ADD
@@ -458,7 +458,7 @@ let instr_of_hex h =
 ;;
 
 
-let instr_to_string i = 
+let op_to_asm i = 
 	match i with 
 	| STOP -> "STOP"
 	| ADD -> "ADD"
@@ -591,6 +591,65 @@ let instr_to_string i =
 	| DELEGATECALL -> "DELEGATECALL"
 	| SUICIDE -> "SUICIDE"
 	| INVALID -> "INVALID"
+;;
+
+
+let dsize_of_op o =
+	match o with 
+	| PUSH1 -> 1
+	| PUSH2 -> 2
+	| PUSH3 -> 3
+	| PUSH4 -> 4
+	| PUSH5 -> 5
+	| PUSH6 -> 6
+	| PUSH7 -> 7
+	| PUSH8 -> 8
+	| PUSH9 -> 9
+	| PUSH10 -> 10
+	| PUSH11 -> 11
+	| PUSH12 -> 12
+	| PUSH13 -> 13
+	| PUSH14 -> 14
+	| PUSH15 -> 15
+	| PUSH16 -> 16
+	| PUSH17 -> 17
+	| PUSH18 -> 18
+	| PUSH19 -> 19
+	| PUSH20 -> 20
+	| PUSH21 -> 21
+	| PUSH22 -> 22
+	| PUSH23 -> 23
+	| PUSH24 -> 24
+	| PUSH25 -> 25
+	| PUSH26 -> 26
+	| PUSH27 -> 27
+	| PUSH28 -> 28
+	| PUSH29 -> 29
+	| PUSH30 -> 30
+	| PUSH31 -> 31
+	| PUSH32 -> 32
+	| _ -> 0
+;;
+
+type Instr = struct {
+	op		:	Op		;
+	data	:	int list	
+};;
+
+let rec data_to_string d n =
+	match d with
+	| dc::d' when n > 0 -> (Printf.sprintf "%X" dc) ^ ( data_to_string d' (n-1) )
+	| [] when n = 0 -> ""
+	| dc::d' when n == 0 -> failwith "Too much data"
+	| [] when n > 0 -> failwith "Not enough data"
+;;
+
+let instr_to_hex i = 
+	(Printf.sprintf "%X" (op_to_hex i.op)) ^ (data_to_string i.data (dsize_of_op i.op))
+;;
+
+let instr_to_asm i = 
+	(op_to_asm i.op) ^ " " ^ (data_to_string i.data (dsize_of_op i.op))
 ;;
 
 type Contract = Instr list;;
