@@ -1,5 +1,7 @@
+module Vm = struct 
+
 let apply_instr state msg i =
-	match i.op with 
+	match fst i with 
 	| STOP -> state
 	| ADD -> state
 	| SUB -> state
@@ -61,56 +63,58 @@ let apply_instr state msg i =
 	| PUSH32
 		-> 
 			let dsize = dsize_of_op i.op in
-
-	| DUP1
-	| DUP2
-	| DUP3
-	| DUP4
-	| DUP5
-	| DUP6
-	| DUP7
-	| DUP8
-	| DUP9
-	| DUP10
-	| DUP11
-	| DUP12
-	| DUP13
-	| DUP14
-	| DUP15
-	| DUP16
-	| SWAP1
-	| SWAP2
-	| SWAP3
-	| SWAP4
-	| SWAP5
-	| SWAP6
-	| SWAP7
-	| SWAP8
-	| SWAP9
-	| SWAP10
-	| SWAP11
-	| SWAP12
-	| SWAP13
-	| SWAP14
-	| SWAP15
-	| SWAP16
-	| LOG0
-	| LOG1
-	| LOG2
-	| LOG3
-	| LOG4
-	| CREATE
-	| CALL
-	| CALLCODE
-	| RETURN
-	| DELEGATECALL
-	| SUICIDE
-	| INVALID
+			state
+	| DUP1 -> state
+	| DUP2 -> state
+	| DUP3 -> state
+	| DUP4 -> state
+	| DUP5 -> state
+	| DUP6 -> state
+	| DUP7 -> state
+	| DUP8 -> state
+	| DUP9 -> state
+	| DUP10 -> state
+	| DUP11 -> state
+	| DUP12 -> state
+	| DUP13 -> state
+	| DUP14 -> state
+	| DUP15 -> state
+	| DUP16 -> state
+	| SWAP1 -> state
+	| SWAP2 -> state
+	| SWAP3 -> state
+	| SWAP4 -> state
+	| SWAP5 -> state
+	| SWAP6 -> state
+	| SWAP7 -> state
+	| SWAP8 -> state
+	| SWAP9 -> state
+	| SWAP10 -> state
+	| SWAP11 -> state
+	| SWAP12 -> state
+	| SWAP13 -> state
+	| SWAP14 -> state
+	| SWAP15 -> state
+	| SWAP16 -> state
+	| LOG0 -> state
+	| LOG1 -> state
+	| LOG2 -> state
+	| LOG3 -> state
+	| LOG4 -> state
+	| CREATE -> state
+	| CALL -> state
+	| CALLCODE -> state
+	| RETURN -> state
+	| DELEGATECALL -> state
+	| SUICIDE -> state
+	| INVALID -> state
 ;;
 
 let init contract =
 	0
 ;;
 
-let apply state msg = 
+let apply state msg = 0
 ;;
+
+end

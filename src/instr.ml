@@ -134,6 +134,8 @@ type op =
 	| INVALID
 ;;
 
+type t = op * int list;;
+type contract = t list;;
 
 
 type gastier = ZERO | BASE | VERYLOW | LOW | MID | HIGH | EXT | SPECIAL | INVALID;;
@@ -323,6 +325,7 @@ let op_to_hex i =
 	| RETURN -> 0xf3
 	| DELEGATECALL -> 0xf4
 	| SUICIDE -> 0xff
+	| INVALID -> 0x00
 ;;
 
 
@@ -458,6 +461,7 @@ let hex_to_op h =
 	| 0xf3 -> RETURN
 	| 0xf4 -> DELEGATECALL
 	| 0xff -> SUICIDE
+	| _ -> INVALID
 ;;
 
 
@@ -634,10 +638,6 @@ let dsize_of_op o =
 	| _ -> 0
 ;;
 
-type t = {
-	op		:	op		;
-	data	:	int list	
-};;
 
 let rec data_to_string d n =
 	match d with
@@ -645,19 +645,34 @@ let rec data_to_string d n =
 	| [] when n = 0 -> ""
 	| dc::d' when n == 0 -> failwith "Too much data"
 	| [] when n > 0 -> failwith "Not enough data"
+	| _ -> failwith "Error"
 ;;
 
 let to_hex i = 
-	(Printf.sprintf "%X" (op_to_hex i.op)) ^ (data_to_string i.data (dsize_of_op i.op))
+	(Printf.sprintf "%X" (op_to_hex (fst i))) ^ (data_to_string (snd i) (dsize_of_op (fst i)))
 ;;
 
 let to_asm i = 
-	(op_to_asm i.op) ^ " " ^ (data_to_string i.data (dsize_of_op i.op))
+	(op_to_asm (fst i)) ^ " " ^ (data_to_string (snd i) (dsize_of_op (fst i)))
 ;;
 
 
-let create (op, data) = {op=op; data=data};;
+let of_bytes s = 
+	let n = String.length s in
+	let opc = String.sub s 0 2 in
+	let s' = String.sub s 2 (n-2) in
+	let op = hex_to_op (Scanf.sscanf opc "%x" (fun x -> x)) in
+	let rec get_data sd d n =
+		match n with
+		| 0 -> (d, sd)
+		| n -> 
+			let dchunk = Scanf.sscanf (String.sub sd 0 2) "%x" (fun x -> x) in
+			let s'' = String.sub sd 2 (n-2) in
+			get_data s'' (d @ [dchunk]) (n-1)						
+	in
+		let isize = dsize_of_op op in
+		let data = get_data s' [] isize in
+		((op,fst data), snd data)
+;;
 
 end
-
-type contract = Instr.t list;;
