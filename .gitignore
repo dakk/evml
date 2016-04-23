@@ -1,5 +1,4 @@
 _build
-META
 *.mllib
 configure  
 myocamlbuild.ml  
