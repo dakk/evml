@@ -1,3 +1,5 @@
+module Instr = 
+
 type Op = 
 	  STOP
 	| ADD
@@ -631,7 +633,7 @@ let dsize_of_op o =
 	| _ -> 0
 ;;
 
-type Instr = struct {
+type t = struct {
 	op		:	Op		;
 	data	:	int list	
 };;
@@ -652,4 +654,6 @@ let instr_to_asm i =
 	(op_to_asm i.op) ^ " " ^ (data_to_string i.data (dsize_of_op i.op))
 ;;
 
-type Contract = Instr list;;
+end
+
+type Contract = Instr.t list;;
