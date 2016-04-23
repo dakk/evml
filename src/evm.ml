@@ -1,10 +1,7 @@
-
-let init_state code =
+let init contract =
 	0
 ;;
 
-(* apply -> State -> data -> State *) 
-let apply state data = 
-
+let apply state msg = 
 
 ;;

@@ -458,3 +458,4 @@ let instr_of_hex h =
 ;;
 
 
+type Contract = Instr list;;
