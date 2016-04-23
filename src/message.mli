@@ -1,13 +1,18 @@
-module Message : sig =
-	type t = struct {
-		origin		: Address.t	
-		code_address: Address.t	
-		sender		: Address.it
-		code		: option
-		data		: option
-		value		: u256
-		gas			: u256
-		gas_price	: u256
+open U256;;
+
+module Address : sig
+	type t
+end
+
+module Message : sig
+	type t = {
+		origin		: Address.t		;	
+		code_address: Address.t		;
+		sender		: Address.t		;
+		code		: int option	;
+		data		: int option	;
+		value		: U256.t		;
+		gas			: U256.t		;
+		gas_price	: U256.t		;
 	}
-with struct =
 end

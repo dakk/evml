@@ -1,7 +1,8 @@
 # OASIS_START
-# DO NOT EDIT (digest: 025780f80a79a0a35b0b2c154b9f288c)
+# DO NOT EDIT (digest: 0e0275121805fa55d68a1940901bad57)
 version = "0.1"
 description = "type-safe ethereum virtual machine"
+requires = "ctypes"
 archive(byte) = "evml.cma"
 archive(byte, plugin) = "evml.cma"
 archive(native) = "evml.cmxa"

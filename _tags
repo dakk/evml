@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: f9e8c7dfea701a9893195a2bdd0b8919)
+# DO NOT EDIT (digest: e2c30142c8f1293b62446e7d6dce3898)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -15,4 +15,5 @@
 "_darcs": not_hygienic
 # Library evml
 "src/evml.cmxs": use_evml
+<src/*.ml{,i}>: pkg_ctypes
 # OASIS_STOP
